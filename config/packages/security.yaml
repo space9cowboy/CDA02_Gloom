@@ -1,0 +1,42 @@
+security:
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        # Firewall pour l'inscription et la connexion (sans JWT)
+        public:
+            pattern: ^/api/auth
+            stateless: true
+            security: false  # Pas besoin d'authentification pour ces routes
+
+        # Firewall pour la connexion via JWT (authentification JWT)
+        login:
+            pattern: ^/api/auth/login
+            stateless: true
+            json_login:
+                check_path: /api/auth/login
+                username_path: email
+                password_path: password
+
+        # Firewall pour les routes protégées par JWT
+        api:
+            pattern: ^/api/
+            stateless: true
+            provider: app_user_provider
+            jwt: ~
+
+    access_control:
+        # Autoriser l'accès anonyme aux routes d'inscription et de connexion
+        - { path: ^/api/auth, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        # Protéger les autres routes API avec JWT
+        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
