@@ -12,21 +12,24 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        
 
-        # Firewall pour l'inscription et la connexion (sans JWT)
+        # Firewall pour json_login et l'inscription
         public:
             pattern: ^/api/auth
             stateless: true
-            security: false  # Pas besoin d'authentification pour ces routes
+            security: false  # Pas d'authentification nécessaire pour ces routes
 
-        # Firewall pour la connexion via JWT (authentification JWT)
-        login:
-            pattern: ^/api/auth/login
-            stateless: true
-            json_login:
-                check_path: /api/auth/login
-                username_path: email
-                password_path: password
+        # Firewall pour la connexion via json_login
+        # login:
+        #     pattern: ^/api/auth/login
+        #     stateless: true
+        #     json_login:
+        #         check_path: /api/auth/login
+        #         username_path: email
+        #         password_path: password
+        #         success_handler: lexik_jwt_authentication.handler.authentication_success
+        #         failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
         # Firewall pour les routes protégées par JWT
         api:
@@ -37,6 +40,7 @@ security:
 
     access_control:
         # Autoriser l'accès anonyme aux routes d'inscription et de connexion
-        - { path: ^/api/auth, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/auth/signup, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/auth/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         # Protéger les autres routes API avec JWT
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
