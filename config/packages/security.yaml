@@ -6,7 +6,7 @@ security:
         app_user_provider:
             entity:
                 class: App\Entity\User
-                property: email
+                property: username
 
     firewalls:
         dev:
@@ -20,7 +20,7 @@ security:
             stateless: true
             security: false  # Pas d'authentification nécessaire pour ces routes
 
-        # Firewall pour la connexion via json_login
+        # # Firewall pour la connexion via json_login
         # login:
         #     pattern: ^/api/auth/login
         #     stateless: true
@@ -44,3 +44,6 @@ security:
         - { path: ^/api/auth/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         # Protéger les autres routes API avec JWT
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+        # Protéger les routes CRUD des instruments pour les utilisateurs authentifiés
+        - { path: ^/api/instruments, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/instruments/.*, roles: IS_AUTHENTICATED_FULLY }
