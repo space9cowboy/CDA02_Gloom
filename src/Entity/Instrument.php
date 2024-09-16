@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\User;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -63,6 +64,14 @@ class Instrument
     #[ORM\Column]
     #[Groups('instrument:read')]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups('instrument:read')]
+    private ?float $rating = null;
+
+    #[ORM\OneToMany(mappedBy: 'instrument', targetEntity: Review::class, cascade: ['persist', 'remove'])]
+    #[Groups('instrument:read')]
+    private $reviews;  // Relation avec les avis
 
     // Getters et Setters
 
@@ -214,4 +223,30 @@ class Instrument
 
         return $this;
     }
+
+    public function getRating(): ?float
+    {
+        return $this->rating;
+    }
+
+    public function setRating(?float $rating): static
+    {
+        $this->rating = $rating;
+
+        return $this;
+    }
+
+//    Gestion des avis
+   public function getReviews()
+   {
+       return $this->reviews;
+   }
+
+   public function addReview(Review $review): static
+   {
+       $this->reviews[] = $review;
+       $review->setInstrument($this);  // Relier l'instrument à l'avis
+
+       return $this;
+   }
 }
