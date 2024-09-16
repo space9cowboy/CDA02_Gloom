@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\User;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity]
 class Instrument
@@ -11,44 +12,59 @@ class Instrument
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('instrument:read')]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('instrument:read')]
     private ?string $title = null;
 
     #[ORM\Column(type: 'text')]
+    #[Groups('instrument:read')]
     private ?string $description = null;
 
     #[ORM\Column(type: 'float')]
+    #[Groups('instrument:read')]
     private ?float $price = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('instrument:read')]
     private ?string $image = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('instrument:read')]
     private ?string $category = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('instrument:read')]
     private ?string $status = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('instrument:read')]
     private ?string $brand = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('instrument:read')]
     private ?string $model = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('instrument:read')]
     private ?string $location = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups('instrument:read')]
     private ?User $seller = null; // Relation avec l'entité User
 
     #[ORM\Column]
+    #[Groups('instrument:read')]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
+    #[Groups('instrument:read')]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    // Getters et Setters
 
     public function getId(): ?int
     {
@@ -163,7 +179,6 @@ class Instrument
         return $this;
     }
 
-    // Relation avec User : Lier un vendeur à l'instrument
     public function getSeller(): ?User
     {
         return $this->seller;
