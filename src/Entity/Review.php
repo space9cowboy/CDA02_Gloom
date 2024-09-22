@@ -12,25 +12,26 @@ class Review
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('instrument:read')]
+    #[Groups('user:read')]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups('instrument:read')]
+    #[Groups('user:read')]
     private ?string $comment = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups('instrument:read')]
+    #[Groups('user:read')]
     private ?float $rating = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups('instrument:read')]
+    #[Groups('review:read')]
     private ?User $user = null;  // Auteur de l'avis
 
-    #[ORM\ManyToOne(targetEntity: Instrument::class)]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Instrument $instrument = null;  // Instrument lié
+    #[Groups('review:read')]
+    private ?User $userNoted = null;  // Utilisateur qui est lié
 
     public function getId(): ?int
     {
@@ -80,14 +81,14 @@ class Review
         return $this;
     }
 
-    public function getInstrument(): ?Instrument
+    public function getUserNoted(): ?User
     {
-        return $this->instrument;
+        return $this->userNoted;
     }
 
-    public function setInstrument(Instrument $instrument): static
+    public function setUserNoted(User $userNoted): static
     {
-        $this->instrument = $instrument;
+        $this->userNoted = $userNoted;
 
         return $this;
     }

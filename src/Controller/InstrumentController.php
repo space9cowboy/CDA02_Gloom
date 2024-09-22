@@ -125,52 +125,52 @@ class InstrumentController extends AbstractController
         return new JsonResponse(['message' => 'Instrument deleted successfully']);
     }
 
-    #[Route('/api/instruments/{id}/review', name: 'api_add_review', methods: ['POST'])]
-    public function addReview(Request $request, Instrument $instrument, EntityManagerInterface $entityManager): JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
-        $user = $this->getUser();
+    // #[Route('/api/instruments/{id}/review', name: 'api_add_review', methods: ['POST'])]
+    // public function addReview(Request $request, Instrument $instrument, EntityManagerInterface $entityManager): JsonResponse
+    // {
+    //     $data = json_decode($request->getContent(), true);
+    //     $user = $this->getUser();
 
-        if (!$user) {
-            return new JsonResponse(['message' => 'User not authenticated'], 401);
-        }
+    //     if (!$user) {
+    //         return new JsonResponse(['message' => 'User not authenticated'], 401);
+    //     }
 
-        $review = new Review();
-        $review->setComment($data['comment']);
-        $review->setRating($data['rating']);
-        $review->setUser($user);
-        $review->setInstrument($instrument);
+    //     $review = new Review();
+    //     $review->setComment($data['comment']);
+    //     $review->setRating($data['rating']);
+    //     $review->setUser($user);
+    //     $review->setInstrument($instrument);
 
-        // Ajout de l'avis à l'instrument
-        $instrument->addReview($review);
+    //     // Ajout de l'avis à l'instrument
+    //     $instrument->addReview($review);
 
-        // Mise à jour de la note moyenne de l'instrument
-        $instrument->setRating($this->calculateAverageRating($instrument));
+    //     // Mise à jour de la note moyenne de l'instrument
+    //     $instrument->setRating($this->calculateAverageRating($instrument));
 
-        $entityManager->persist($review);
-        $entityManager->flush();
+    //     $entityManager->persist($review);
+    //     $entityManager->flush();
 
-        return new JsonResponse(['message' => 'Review added successfully'], 201);
-    }
+    //     return new JsonResponse(['message' => 'Review added successfully'], 201);
+    // }
 
-    private function calculateAverageRating(Instrument $instrument): float
-    {
-        $reviews = $instrument->getReviews();
-        $totalRating = 0;
-        $count = count($reviews);
+    // private function calculateAverageRating(Instrument $instrument): float
+    // {
+    //     $reviews = $instrument->getReviews();
+    //     $totalRating = 0;
+    //     $count = count($reviews);
 
-        foreach ($reviews as $review) {
-            $totalRating += $review->getRating();
-        }
+    //     foreach ($reviews as $review) {
+    //         $totalRating += $review->getRating();
+    //     }
 
-        return $count > 0 ? $totalRating / $count : 0;
-    }
+    //     return $count > 0 ? $totalRating / $count : 0;
+    // }
 
-    #[Route('/api/instruments/bestrated', name: 'api_best_rated_instruments', methods: ['GET'])]
-    public function getBestRatedInstruments(InstrumentRepository $instrumentRepository): JsonResponse
-    {
-        $bestRatedInstruments = $instrumentRepository->findBy([], ['rating' => 'DESC'], 10);
+    // #[Route('/api/instruments/bestrated', name: 'api_best_rated_instruments', methods: ['GET'])]
+    // public function getBestRatedInstruments(InstrumentRepository $instrumentRepository): JsonResponse
+    // {
+    //     $bestRatedInstruments = $instrumentRepository->findBy([], ['rating' => 'DESC'], 10);
 
-        return $this->json($bestRatedInstruments, 200, [], ['groups' => 'instrument:read']);
-    }
+    //     return $this->json($bestRatedInstruments, 200, [], ['groups' => 'instrument:read']);
+    // }
 }
