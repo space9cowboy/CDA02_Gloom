@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\User;
 use App\Entity\Review;
+use App\Entity\Instrument;
 use App\Repository\UserRepository;
 
 class UserController extends AbstractController
@@ -91,6 +92,31 @@ class UserController extends AbstractController
         return $this->json($bestRatedUser, 200, [], ['groups' => 'user:read']);
     }
 
+    #[Route('/api/user/favorites/{instrumentId}', name: 'api_add_favorite', methods: ['POST'])]
+    public function addFavorite(int $instrumentId, EntityManagerInterface $entityManager): JsonResponse
+    {
+        // Récupérer l'utilisateur connecté
+        /** @var User $user */
+        $user = $this->getUser();
+        if (!$user) {
+            return new JsonResponse(['message' => 'User not authenticated'], 401);
+        }
+
+        // Récupérer l'instrument à partir de l'id
+        $instrument = $entityManager->getRepository(Instrument::class)->find($instrumentId);
+        if (!$instrument) {
+            return new JsonResponse(['message' => 'Instrument not found'], 404);
+        }
+
+        // Ajouter l'instrument à la liste des favoris de l'utilisateur
+        $user->addFavori($instrument);
+
+        // Sauvegarder dans la base de données
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return new JsonResponse(['message' => 'Instrument added to favorites'], 200);
+    }
    
 
 

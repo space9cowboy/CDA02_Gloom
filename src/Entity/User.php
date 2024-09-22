@@ -65,9 +65,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[MaxDepth(1)]
     private Collection $reviewsReceive; // Avis reçus par l'utilisateur
 
+    #[ORM\ManyToMany(targetEntity: Instrument::class)]
+    #[ORM\JoinTable(name: "user_favorites")] // Table pivot pour gérer les favoris
+    #[Groups(['user:read',  'instrument:read'])]
+    #[MaxDepth(1)]
+    private Collection $favoris;
+
 
     public function __construct()
     {
+        $this->favoris = new ArrayCollection();
         $this->reviewsSend = new ArrayCollection();
         $this->reviewsReceive = new ArrayCollection();
     }
@@ -226,6 +233,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->reviewsReceive[] = $review;
         $review->setUserNoted($this);
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Instrument>
+     */
+    public function getFavoris(): Collection
+    {
+        return $this->favoris;
+    }
+
+    public function addFavori(Instrument $instrument): static
+    {
+        if (!$this->favoris->contains($instrument)) {
+            $this->favoris->add($instrument);
+        }
+
+        return $this;
+    }
+
+    public function removeFavori(Instrument $instrument): static
+    {
+        $this->favoris->removeElement($instrument);
+
         return $this;
     }
 }

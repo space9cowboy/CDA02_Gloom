@@ -25,7 +25,7 @@ class InstrumentController extends AbstractController
     {
         $instruments = $instrumentRepository->findAll();
 
-        return $this->json($instruments, 200, [], ['groups' => 'instrument:read']);
+        return $this->json($instruments, 200, [], ['groups' => 'user:read','instrument:read']);
     }
 
     #[Route('/api/instruments/{id}', name: 'api_get_instrument', methods: ['GET'])]
@@ -37,7 +37,7 @@ class InstrumentController extends AbstractController
             return new JsonResponse(['message' => 'Instrument not found'], 404);
         }
 
-        return $this->json($instrument, 200, [], ['groups' => 'instrument:read']);
+        return $this->json($instrument, 200, [], ['groups' => 'user:read','instrument:read']);
     }
 
     #[Route('/api/instruments', name: 'api_create_instrument', methods: ['POST'])]
