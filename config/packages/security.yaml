@@ -39,12 +39,19 @@ security:
             jwt: ~
 
     access_control:
-        # Autoriser l'accès anonyme aux routes d'inscription et de connexion
+         # Autoriser l'accès anonyme aux routes d'inscription et de connexion
         - { path: ^/api/auth/signup, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/auth/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        # Protéger les autres routes API avec JWT
-        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
-        # Protéger les routes CRUD des instruments pour les utilisateurs authentifiés
-        - { path: ^/api/instruments, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/api/instruments/.*, roles: IS_AUTHENTICATED_FULLY }
+
+        # # Autoriser les requêtes GET sans authentification pour toutes les routes
+        # - { path: ^/api, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [GET] }
+
+         # Protéger les routes POST, PUT, DELETE de l'entité User et toutes les autres routes API
+        - { path: ^/api/user, roles: IS_AUTHENTICATED_FULLY, methods: [POST, PUT, DELETE] }
+        - { path: ^/api/user/.*, roles: IS_AUTHENTICATED_FULLY, methods: [POST, PUT, DELETE] }
+
+        # Protéger les routes POST, PUT, DELETE des instruments et toutes les autres routes API
+        # - { path: ^/api, roles: IS_AUTHENTICATED_FULLY, methods: [POST, PUT, DELETE] }
+        - { path: ^/api/instruments, roles: IS_AUTHENTICATED_FULLY, methods: [POST, PUT, DELETE] }
+        - { path: ^/api/instruments/.*, roles: IS_AUTHENTICATED_FULLY, methods: [POST, PUT, DELETE] }
 
