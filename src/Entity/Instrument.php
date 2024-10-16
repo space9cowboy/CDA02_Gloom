@@ -65,6 +65,9 @@ class Instrument
     #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[ORM\Column]
+    private ?bool $isSold = null;
+
     // #[ORM\Column(nullable: true)]
     // #[Groups('instrument:read')]
     // private ?float $rating = null;
@@ -224,29 +227,15 @@ class Instrument
         return $this;
     }
 
-//     public function getRating(): ?float
-//     {
-//         return $this->rating;
-//     }
+public function isSold(): ?bool
+{
+    return $this->isSold;
+}
 
-//     public function setRating(?float $rating): static
-//     {
-//         $this->rating = $rating;
+public function setSold(bool $isSold): static
+{
+    $this->isSold = $isSold;
 
-//         return $this;
-//     }
-
-// //    Gestion des avis
-//    public function getReviews()
-//    {
-//        return $this->reviews;
-//    }
-
-//    public function addReview(Review $review): static
-//    {
-//        $this->reviews[] = $review;
-//        $review->setInstrument($this);  // Relier l'instrument à l'avis
-
-//        return $this;
-//    }
+    return $this;
+}
 }
