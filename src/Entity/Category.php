@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category
@@ -11,15 +12,19 @@ class Category
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups( 'category:read', 'instrument:read')]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups( 'category:read', 'instrument:read')]
     private ?string $name = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups( 'category:read', 'instrument:read')]
     private ?int $parent_category_id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups( 'category:read', 'instrument:read')]
     private ?string $description = null;
 
     public function getId(): ?int
