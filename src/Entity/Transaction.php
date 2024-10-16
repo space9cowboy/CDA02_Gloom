@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\TransactionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TransactionRepository::class)]
 class Transaction
@@ -11,18 +12,23 @@ class Transaction
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     private ?int $buyer_id = null;
 
     #[ORM\Column]
+    #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     private ?int $instrument_id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     private ?string $transaction_amount = null;
 
     #[ORM\Column]
+    #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     private ?int $seller_id = null;
 
     public function getId(): ?int

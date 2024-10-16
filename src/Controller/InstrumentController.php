@@ -83,7 +83,7 @@ class InstrumentController extends AbstractController
         $user = $this->getUser();
 
         // Vérifie que c'est bien le propriétaire qui modifie l'instrument
-        if ($instrument->getSeller() !== $user && $user->getRoles() !== "admin") {
+        if ($instrument->getSeller() !== $user && $user->getType() !== "admin") {
             return new JsonResponse(['message' => 'Unauthorized'], 403);
         }
 
@@ -135,7 +135,7 @@ class InstrumentController extends AbstractController
         $user = $this->getUser();
 
         // Vérifie que c'est bien le propriétaire qui supprime l'instrument
-        if ($instrument->getSeller() !== $user && $user->getRoles() !== "admin") {
+        if ($instrument->getSeller() !== $user && $user->getType() !== "admin") {
             return new JsonResponse(['message' => 'Unauthorized'], 403);
         }
 

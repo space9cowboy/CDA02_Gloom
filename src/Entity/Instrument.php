@@ -13,56 +13,56 @@ class Instrument
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups( 'user:read', 'instrument:read')]
+    #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups( 'user:read', 'instrument:read')]
+    #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     private ?string $title = null;
 
     #[ORM\Column(type: 'text')]
-    #[Groups( 'user:read', 'instrument:read')]
+    #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     private ?string $description = null;
 
     #[ORM\Column(type: 'float')]
-    #[Groups( 'user:read', 'instrument:read')]
+    #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     private ?float $price = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups( 'user:read', 'instrument:read')]
+    #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     private ?string $image = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups( 'user:read', 'instrument:read')]
+    #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     private ?string $category = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups( 'user:read', 'instrument:read')]
+    #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     private ?string $status = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups( 'user:read', 'instrument:read')]
+    #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     private ?string $brand = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups( 'user:read', 'instrument:read')]
+    #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     private ?string $model = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups( 'user:read', 'instrument:read')]
+    #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     private ?string $location = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups( 'user:read', 'instrument:read')]
+    #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     private ?User $seller = null; // Relation avec l'entité User
 
     #[ORM\Column]
-    #[Groups( 'user:read', 'instrument:read')]
+    #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    #[Groups( 'user:read', 'instrument:read')]
+    #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     // #[ORM\Column(nullable: true)]

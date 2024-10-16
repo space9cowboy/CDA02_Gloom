@@ -17,7 +17,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer")]
-    #[Groups(groups: ['user:read','instrument:read', 'review:read'])]
+    #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
 
     private ?int $id = null;
 
@@ -35,18 +35,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(groups: ['user:read','instrument:read', 'review:read'])]
+    #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(groups: ['user:read','instrument:read', 'review:read'])]
+    #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     private ?string $username = null;
 
     #[ORM\Column(length: 255)]
     private ?string $type = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups( 'user:read', 'instrument:read', 'review:read')]
+    #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     private ?string $image = null;
 
     #[ORM\Column]
@@ -56,22 +56,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     // private ?\DateTimeImmutable $updatedAt = null; // Corrigé de updateAt à updatedAt
 
     #[ORM\Column(nullable: true)]
-    #[Groups(groups: ['user:read','instrument:read', 'review:read'])]
+    #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     private ?float $rating = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Review::class, cascade: ['persist', 'remove'])]
-    #[Groups(groups: ['user:read', 'instrument:read', 'review:read'])]
+    #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     #[MaxDepth(1)]
     private Collection $reviewsSend; // Avis donnés par l'utilisateur
 
     #[ORM\OneToMany(mappedBy: 'userNoted', targetEntity: Review::class, cascade: ['persist', 'remove'])]
-    #[Groups(groups: ['user:read', 'instrument:read', 'review:read'])]
+    #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     #[MaxDepth(1)]
     private Collection $reviewsReceive; // Avis reçus par l'utilisateur
 
     #[ORM\ManyToMany(targetEntity: Instrument::class)]
     #[ORM\JoinTable(name: "user_favorites")] // Table pivot pour gérer les favoris
-    #[Groups(['user:read',  'instrument:read'])]
+    #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     #[MaxDepth(1)]
     private Collection $favoris;
 
