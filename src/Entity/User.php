@@ -45,6 +45,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $type = null;
 
+    #[ORM\Column(length: 255)]
+    #[Groups( 'user:read', 'instrument:read', 'review:read')]
+    private ?string $image = null;
+
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -172,6 +176,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setType(string $type): static
     {
         $this->type = $type;
+
+        return $this;
+    }
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }

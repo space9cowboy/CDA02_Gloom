@@ -89,14 +89,34 @@ class InstrumentController extends AbstractController
 
         $data = json_decode($request->getContent(), true);
 
+          // Mise à jour conditionnelle des champs
+    if (isset($data['title'])) {
         $instrument->setTitle($data['title']);
+    }
+    
+    if (isset($data['description'])) {
         $instrument->setDescription($data['description']);
+    }
+    
+    if (isset($data['price'])) {
         $instrument->setPrice($data['price']);
+    }
+    
+    if (isset($data['category'])) {
         $instrument->setCategory($data['category']);
+    }
+    
+    if (isset($data['brand'])) {
         $instrument->setBrand($data['brand']);
+    }
+    
+    if (isset($data['model'])) {
         $instrument->setModel($data['model']);
+    }
+    
+    if (isset($data['location'])) {
         $instrument->setLocation($data['location']);
-        $instrument->setUpdatedAt(new \DateTimeImmutable());
+    }
 
         $this->entityManager->flush();
 
