@@ -43,6 +43,7 @@ class CategoryController extends AbstractController
         $category = new Category();
         $category->setName($data['name']);
         $category->setDescription($data['description']);
+        $category->setParentCategoryId($data['parent_category_id']);
 
         $entityManager->persist($category);
         $entityManager->flush();
@@ -86,5 +87,18 @@ class CategoryController extends AbstractController
         $entityManager->flush();
 
         return new JsonResponse(['message' => 'Category deleted successfully']);
+    }
+
+    #[Route('/api/categories/parent/{parentId}', name: 'api_get_categories_by_parent', methods: ['GET'])]
+    public function getCategoriesByParent(CategoryRepository $categoryRepository, int $parentId): JsonResponse
+    {
+        // Recherche des catégories en fonction du parentId
+        $categories = $categoryRepository->findBy(['parent_category_id' => $parentId]);
+
+        if (!$categories) {
+            return new JsonResponse(['message' => 'No categories found for this parent ID'], 404);
+        }
+
+        return $this->json($categories, 200, [], ['groups' => 'category:read', 'instrument:read']);
     }
 }
