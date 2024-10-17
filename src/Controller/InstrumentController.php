@@ -40,6 +40,18 @@ class InstrumentController extends AbstractController
         return $this->json($instrument, 200, [], ['groups' => 'user:read','instrument:read']);
     }
 
+    #[Route('/api/instruments/category/{category}', name: 'get_instruments_by_category', methods: ['GET'])]
+    public function getByCategory(InstrumentRepository $instrumentRepository, string $category): JsonResponse
+    {
+        // Récupérer les instruments par catégorie
+        $instruments = $instrumentRepository->findBy(['category' => $category]);
+
+        if (!$instruments) {
+            return new JsonResponse(['message' => 'No instruments found for this category']);
+        }
+        return $this->json($instruments, 200, [], ['groups' => 'user:read','instrument:read']);
+    }
+
     #[Route('/api/instruments', name: 'api_create_instrument', methods: ['POST'])]
     public function createInstrument(Request $request): JsonResponse
     {
