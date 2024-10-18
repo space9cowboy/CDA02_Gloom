@@ -41,6 +41,23 @@ class UserController extends AbstractController
         return $this->json($user, 200, [], ['groups' => 'user:read']);
     }
 
+    #[Route('/api/user/username/{username}', name: 'api_get_user_by_username', methods: ['GET'])]
+    public function getByUsername(UserRepository $userRepository, string $username): JsonResponse
+    {
+        // Récupérer l'utilisateur via son username
+        $user = $userRepository->findOneBy(['username' => $username]);
+
+        // Vérifier si l'utilisateur existe
+        if (!$user) {
+            return new JsonResponse(['message' => 'User not found'], 404);
+        }
+
+        // Retourner les informations de l'utilisateur avec le groupe de sérialisation 'user:read'
+        return $this->json($user, 200, [], ['groups' => 'user:read']);
+    }
+
+    
+
 
     #[Route('/api/user/{id}/review', name: 'api_add_review', methods: ['POST'])]
     public function addReview(Request $request, User $userNoted, EntityManagerInterface $entityManager): JsonResponse

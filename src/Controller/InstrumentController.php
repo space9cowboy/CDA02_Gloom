@@ -76,6 +76,7 @@ class InstrumentController extends AbstractController
         $instrument->setSeller($user); // Associe l'utilisateur connecté comme vendeur
         $instrument->setCreatedAt(new \DateTimeImmutable());
         $instrument->setUpdatedAt(new \DateTimeImmutable());
+        $instrument->setSold($data['is_sold']);
 
         $this->entityManager->persist($instrument);
         $this->entityManager->flush();
