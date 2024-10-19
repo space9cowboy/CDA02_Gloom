@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Instrument;
-use App\Entity\Review;
 use App\Repository\InstrumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -41,6 +40,20 @@ class InstrumentController extends AbstractController
   
           return $this->json($instruments, 200, [], ['groups' => 'user:read', 'instrument:read']);
       }
+
+        // Nouvelle route pour récupérer tous les instruments d'un vendeur
+        #[Route('/api/instruments/buyer/{buyerId}', name: 'api_get_instruments_by_buyer', methods: ['GET'])]
+        public function getInstrumentsByBuyer(InstrumentRepository $instrumentRepository, int $buyerId): JsonResponse
+        {
+            // Récupérer tous les instruments par ID du vendeur
+            $instruments = $instrumentRepository->findBy(['buyer' => $buyerId]);
+    
+            if (!$instruments) {
+                return new JsonResponse(['message' => 'No instruments found for this buyer'], 404);
+            }
+    
+            return $this->json($instruments, 200, [], ['groups' => 'user:read', 'instrument:read']);
+        }
 
 
     #[Route('/api/instruments/{id}', name: 'api_get_instrument', methods: ['GET'])]

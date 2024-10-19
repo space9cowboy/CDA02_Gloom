@@ -57,6 +57,13 @@ class Instrument
     #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     private ?User $seller = null; // Relation avec l'entité User
 
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
+    private ?User $buyer = null; // Relation avec l'entité User
+
+
+
     #[ORM\Column]
     #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     private ?\DateTimeImmutable $createdAt = null;
@@ -67,6 +74,9 @@ class Instrument
 
     #[ORM\Column]
     private ?bool $isSold = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $buyer_id = null;
 
     // #[ORM\Column(nullable: true)]
     // #[Groups('instrument:read')]
@@ -203,6 +213,18 @@ class Instrument
         return $this;
     }
 
+    public function getBuyer(): ?User
+    {
+        return $this->buyer;
+    }
+
+    public function setBuyer(?User $buyer): static
+    {
+        $this->buyer = $buyer;
+
+        return $this;
+    }
+
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
@@ -235,6 +257,18 @@ public function isSold(): ?bool
 public function setSold(bool $isSold): static
 {
     $this->isSold = $isSold;
+
+    return $this;
+}
+
+public function getBuyerId(): ?int
+{
+    return $this->buyer_id;
+}
+
+public function setBuyerId(?int $buyer_id): static
+{
+    $this->buyer_id = $buyer_id;
 
     return $this;
 }

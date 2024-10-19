@@ -22,44 +22,48 @@ class TransactionController extends AbstractController
     }
 
     // POST: Créer une nouvelle transaction
-    #[Route('/api/transactions', name: 'api_create_transaction', methods: ['POST'])]
-    public function createTransaction(Request $request): JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
-        $user = $this->getUser(); // Récupérer l'utilisateur connecté (acheteur)
+#[Route('/api/transactions', name: 'api_create_transaction', methods: ['POST'])]
+public function createTransaction(Request $request): JsonResponse
+{
+    $data = json_decode($request->getContent(), true);
+    $user = $this->getUser(); // Récupérer l'utilisateur connecté (acheteur)
 
-        if (!$user) {
-            return new JsonResponse(['message' => 'User not authenticated'], 401);
-        }
-
-        // Récupérer l'instrument à partir de son ID
-        $instrument = $this->entityManager->getRepository(Instrument::class)->find($data['instrument_id']);
-        if (!$instrument) {
-            return new JsonResponse(['message' => 'Instrument not found'], 404);
-        }
-
-        // Récupérer le vendeur (propriétaire de l'instrument)
-        $seller = $instrument->getSeller();
-        if (!$seller) {
-            return new JsonResponse(['message' => 'Seller not found'], 404);
-        }
-
-        if ($user->getId() === $seller->getId()) {
-            return new JsonResponse(['message' => 'Buyer and seller cannot be the same user'], 400);
-        }
-
-        // Créer la transaction
-        $transaction = new Transaction();
-        $transaction->setBuyerId($user->getId());
-        $transaction->setSellerId($seller->getId());
-        $transaction->setInstrumentId($instrument->getId());
-        $transaction->setTransactionAmount($data['transaction_amount']);
-
-        $this->entityManager->persist($transaction);
-        $this->entityManager->flush();
-
-        return new JsonResponse(['message' => 'Transaction created successfully'], 201);
+    if (!$user) {
+        return new JsonResponse(['message' => 'User not authenticated'], 401);
     }
+
+    // Récupérer l'instrument à partir de son ID
+    $instrument = $this->entityManager->getRepository(Instrument::class)->find($data['instrument_id']);
+    if (!$instrument) {
+        return new JsonResponse(['message' => 'Instrument not found'], 404);
+    }
+
+    // Récupérer le vendeur (propriétaire de l'instrument)
+    $seller = $instrument->getSeller();
+    if (!$seller) {
+        return new JsonResponse(['message' => 'Seller not found'], 404);
+    }
+
+    if ($user->getId() === $seller->getId()) {
+        return new JsonResponse(['message' => 'Buyer and seller cannot be the same user'], 400);
+    }
+
+    // Créer la transaction
+    $transaction = new Transaction();
+    $transaction->setBuyerId($user->getId());
+    $transaction->setSellerId($seller->getId());
+    $transaction->setInstrumentId($instrument->getId());
+    $transaction->setTransactionAmount($data['transaction_amount']);
+    $instrument->setSold(true); // Mettre à jour le statut à vendu
+    $instrument->setBuyerId($user->getId());
+
+    // Persister la transaction et l'instrument
+    $this->entityManager->persist($transaction);
+    $this->entityManager->persist($instrument); // Ne pas oublier de persister l'instrument modifié
+    $this->entityManager->flush();
+
+    return new JsonResponse(['message' => 'Transaction created and instrument updated successfully'], 201);
+}
 
     // GET: Récupérer toutes les transactions de l'utilisateur connecté
     #[Route('/api/transactions', name: 'api_get_transactions', methods: ['GET'])]
