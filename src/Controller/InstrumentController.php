@@ -28,6 +28,21 @@ class InstrumentController extends AbstractController
         return $this->json($instruments, 200, [], ['groups' => 'user:read','instrument:read']);
     }
 
+      // Nouvelle route pour récupérer tous les instruments d'un vendeur
+      #[Route('/api/instruments/seller/{sellerId}', name: 'api_get_instruments_by_seller', methods: ['GET'])]
+      public function getInstrumentsBySeller(InstrumentRepository $instrumentRepository, int $sellerId): JsonResponse
+      {
+          // Récupérer tous les instruments par ID du vendeur
+          $instruments = $instrumentRepository->findBy(['seller' => $sellerId]);
+  
+          if (!$instruments) {
+              return new JsonResponse(['message' => 'No instruments found for this seller'], 404);
+          }
+  
+          return $this->json($instruments, 200, [], ['groups' => 'user:read', 'instrument:read']);
+      }
+
+
     #[Route('/api/instruments/{id}', name: 'api_get_instrument', methods: ['GET'])]
     public function getInstrument(InstrumentRepository $instrumentRepository, int $id): JsonResponse
     {
