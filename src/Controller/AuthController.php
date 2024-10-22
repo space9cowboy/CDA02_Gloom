@@ -61,19 +61,19 @@ class AuthController extends AbstractController
 
         // Vérifie si les champs requis sont présents
         if (empty($data['username']) || empty($data['password'])) {
-            return new JsonResponse(['message' => 'Email and password are required'], 400);
+            return new JsonResponse(['message' => 'Username et mot de passe sont requis'], 400);
         }
 
-        // Recherche l'utilisateur par email
+        // Recherche l'utilisateur par username
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $data['username']]);
 
         if (!$user) {
-            return new JsonResponse(['message' => 'Invalid credentials'], 401);
+            return new JsonResponse(['message' => 'Username incorrect'], 401);
         }
 
         // Vérifie si le mot de passe est correct
         if (!$this->passwordHasher->isPasswordValid($user, $data['password'])) {
-            return new JsonResponse(['message' => 'Invalid credentials'], 401);
+            return new JsonResponse(['message' => 'Mot de passe incorrect'], 401);
         }
 
         // Génère un token JWT

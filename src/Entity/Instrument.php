@@ -73,6 +73,7 @@ class Instrument
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column]
+    #[Groups(groups: ['user:read','instrument:read', 'review:read', 'transaction:read'])]
     private ?bool $isSold = null;
 
     #[ORM\Column(nullable: true)]

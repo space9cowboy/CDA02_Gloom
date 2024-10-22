@@ -59,7 +59,7 @@ class UserController extends AbstractController
     
 
 
-    #[Route('/api/user/{id}/review', name: 'api_add_review', methods: ['POST'])]
+    #[Route('/api/user/review/{id}', name: 'api_add_review', methods: ['POST'])]
     public function addReview(Request $request, User $userNoted, EntityManagerInterface $entityManager): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
