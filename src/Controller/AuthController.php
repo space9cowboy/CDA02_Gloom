@@ -30,7 +30,7 @@ class AuthController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        if (!$data['email'] || !$data['password'] || !$data['username'] || !$data['type']) {
+        if (!$data['email'] || !$data['password'] || !$data['username'] || !$data['image'] || !$data['type']) {
             return new JsonResponse(['message' => 'Missing required fields'], 400);
         }
 
@@ -46,6 +46,7 @@ class AuthController extends AbstractController
         $user->setUsername($data['username']);
         $user->setType($data['type']);
         $user->setPassword($this->passwordHasher->hashPassword($user, $data['password']));
+        $user->setImage($data['image']);
         $user->setCreatedAt(new \DateTimeImmutable());
 
         $this->entityManager->persist($user);
